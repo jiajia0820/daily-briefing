@@ -5,14 +5,46 @@ logger = get_logger("bilibili_fetcher")
 
 TIMEOUT = 10
 
-# B站 WBI 搜索 API
 SEARCH_API = "https://api.bilibili.com/x/web-interface/wbi/search/type"
+POPULAR_API = "https://api.bilibili.com/x/web-interface/popular"
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Referer": "https://search.bilibili.com",
+    "Referer": "https://www.bilibili.com",
     "Cookie": "buvid3=daily-briefing",
 }
+
+
+def fetch_popular_videos(count: int = 20) -> list[dict]:
+    try:
+        logger.info("B站热门: 正在抓取")
+        resp = requests.get(
+            POPULAR_API,
+            params={"ps": min(count, 50), "pn": 1},
+            headers=HEADERS,
+            timeout=TIMEOUT,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        items = data.get("data", {}).get("list", [])
+        videos = []
+        for item in items:
+            bvid = item.get("bvid", "")
+            title = item.get("title", "").strip()
+            owner = item.get("owner", {}).get("name", "")
+            if bvid and title:
+                videos.append({
+                    "title": title,
+                    "url": f"https://www.bilibili.com/video/{bvid}",
+                    "source": "B站",
+                    "author": owner,
+                    "category": "热门",
+                })
+        logger.info(f"B站热门: 获取 {len(videos)} 条视频")
+        return videos
+    except Exception as e:
+        logger.warning(f"B站热门抓取失败: {e}")
+        return []
 
 
 def fetch_bilibili_videos(keywords: list[str], count: int = 10) -> list[dict]:

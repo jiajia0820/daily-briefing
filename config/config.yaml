@@ -7,8 +7,8 @@ interests:
     keywords: ["人工智能", "大模型", "LLM", "AI Agent", "GPT", "深度学习", "机器学习", "Claude", "OpenAI", "DeepSeek"]
 
 bilibili:
-  name: "求职就业"
-  search_keywords: ["大学生求职", "应届生面试", "校招攻略", "简历指导", "就业指导"]
+  name: "B站热门"
+  mode: "popular"
   count: 5
 
 schedule:
