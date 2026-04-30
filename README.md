@@ -1,0 +1,129 @@
+# Daily Briefing 📰
+
+一个个性化的日报推送系统。每天自动抓取资讯、AI 生成知识卡片，通过飞书推送。
+
+基于 GitHub Actions 运行，零成本、零运维。Fork 后修改配置即可使用。
+
+## 功能
+
+### 早报（每日 8:00）
+- **全行业资讯 ×5** — 从 36氪、虎嗅、少数派等 RSS 源 + 知乎热榜抓取，GPT 智能选稿
+- **兴趣领域资讯 ×5** — 按你配置的关键词筛选（如 AI、企业招聘）
+- **播客推荐** — 小宇宙最新单集 + 收听链接
+- **天气** — 和风天气 API
+- **每日一句** — 名人名言 / 网络热梗
+
+### 午报（每日 12:00）
+- **AI 技巧** — GPT 生成实用技巧 + 延伸阅读链接
+- **心理学/经济学** — 每日一个知识卡片
+- **品牌洞察** — 商业策略分析
+
+## 快速开始
+
+### 1. Fork 本仓库
+
+### 2. 配置 GitHub Secrets
+
+在仓库 Settings → Secrets and variables → Actions 中添加：
+
+| Secret | 说明 | 获取方式 |
+|--------|------|---------|
+| `OPENAI_API_KEY` | OpenAI API Key | https://platform.openai.com/api-keys |
+| `FEISHU_WEBHOOK` | 飞书机器人 Webhook URL | 飞书群 → 添加自定义机器人 |
+| `QWEATHER_API_KEY` | 和风天气 API Key | https://dev.qweather.com （免费） |
+
+### 3. 修改配置
+
+编辑 `config/config.yaml`：
+
+```yaml
+user:
+  city: "你的城市"
+
+interests:
+  - name: "你的兴趣1"
+    keywords: ["关键词1", "关键词2"]
+  - name: "你的兴趣2"
+    keywords: ["关键词3", "关键词4"]
+```
+
+编辑 `config/rss_sources.yaml` 添加/删除 RSS 源。
+
+### 4. 手动测试
+
+在 GitHub Actions 页面，手动触发 `Morning Briefing` 或 `Afternoon Briefing` 工作流。
+
+### 5. 自动运行
+
+配置完成后，GitHub Actions 每天自动运行：
+- 早报：北京时间 8:00
+- 午报：北京时间 12:00
+
+## 项目结构
+
+```
+daily-briefing/
+├── config/
+│   ├── config.yaml          # 主配置
+│   ├── rss_sources.yaml     # RSS 源清单
+│   └── quotes.json          # 名言库
+├── src/
+│   ├── fetchers/            # 数据获取
+│   │   ├── rss_fetcher.py
+│   │   ├── zhihu_fetcher.py
+│   │   ├── weather_fetcher.py
+│   │   ├── quote_fetcher.py
+│   │   └── podcast_fetcher.py
+│   ├── processors/          # 数据处理
+│   │   ├── llm_selector.py  # GPT 选稿
+│   │   └── llm_generator.py # GPT 生成内容
+│   ├── publishers/          # 推送
+│   │   └── feishu.py
+│   ├── utils/
+│   │   ├── dedup.py         # 去重
+│   │   └── logger.py
+│   ├── morning.py           # 早报入口
+│   └── afternoon.py         # 午报入口
+├── .github/workflows/       # GitHub Actions
+├── data/                    # 运行时数据
+└── docs/                    # 设计文档
+```
+
+## 本地开发
+
+```bash
+# 安装依赖
+pip install -r requirements.txt
+
+# 创建 .env 文件
+cp .env.example .env
+# 编辑 .env 填入你的 API Key
+
+# 运行早报
+python src/morning.py
+
+# 运行午报
+python src/afternoon.py
+```
+
+## 成本
+
+| 项目 | 费用 |
+|------|------|
+| GitHub Actions | 免费 |
+| OpenAI GPT-4o-mini | ~$0.01/天 |
+| 和风天气 API | 免费 |
+| 飞书机器人 | 免费 |
+| **总计** | **~$0.3/月** |
+
+## 技术栈
+
+- **Python 3.11+**
+- **OpenAI GPT-4o-mini** — 选稿 + 内容生成
+- **feedparser** — RSS 解析
+- **GitHub Actions** — 定时任务
+- **飞书 Webhook** — 消息推送
+
+## License
+
+MIT

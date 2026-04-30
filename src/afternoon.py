@@ -1,0 +1,78 @@
+import os
+import sys
+import yaml
+from datetime import datetime
+from pathlib import Path
+from dotenv import load_dotenv
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.processors.llm_generator import generate_tip
+from src.publishers.feishu import build_afternoon_card, send_feishu_card
+from src.utils.logger import get_logger
+
+logger = get_logger("afternoon")
+
+
+def load_config() -> dict:
+    config_path = PROJECT_ROOT / "config" / "config.yaml"
+    with open(config_path, "r", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
+    _resolve_env(config)
+    return config
+
+
+def _resolve_env(obj):
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if isinstance(v, str) and v.startswith("${") and v.endswith("}"):
+                env_var = v[2:-1]
+                obj[k] = os.getenv(env_var, "")
+            else:
+                _resolve_env(v)
+    elif isinstance(obj, list):
+        for item in obj:
+            _resolve_env(item)
+
+
+def main():
+    load_dotenv(PROJECT_ROOT / ".env")
+
+    logger.info("========== 午报开始 ==========")
+    config = load_config()
+
+    llm_config = config.get("llm", {})
+    model = llm_config.get("model", "gpt-4o-mini")
+    api_key = llm_config.get("api_key", "")
+
+    # 1. 生成三条内容
+    logger.info("--- 步骤 1: 生成 AI 技巧 ---")
+    ai_tip = generate_tip("ai_tip", model=model, api_key=api_key)
+
+    logger.info("--- 步骤 2: 生成心理学/经济学技巧 ---")
+    psychology = generate_tip("psychology", model=model, api_key=api_key)
+
+    logger.info("--- 步骤 3: 生成品牌洞察 ---")
+    brand = generate_tip("brand_insight", model=model, api_key=api_key)
+
+    tips = [ai_tip, psychology, brand]
+
+    # 2. 组装飞书卡片
+    logger.info("--- 步骤 4: 组装飞书卡片 ---")
+    date_str = datetime.now().strftime("%Y年%m月%d日")
+    card = build_afternoon_card(tips=tips, date_str=date_str)
+
+    # 3. 推送
+    logger.info("--- 步骤 5: 飞书推送 ---")
+    webhook_url = config.get("publisher", {}).get("feishu", {}).get("webhook_url", "")
+    if not webhook_url:
+        logger.error("飞书 Webhook URL 未配置，跳过推送")
+    else:
+        send_feishu_card(webhook_url, card)
+
+    logger.info("========== 午报完成 ==========")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,34 @@
+name: Morning Briefing
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # UTC 00:00 = CST 08:00
+  workflow_dispatch:       # 手动触发
+
+jobs:
+  morning:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run morning briefing
+        run: python src/morning.py
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+          QWEATHER_API_KEY: ${{ secrets.QWEATHER_API_KEY }}
+
+      - name: Commit dedup data
+        run: |
+          git config user.name "daily-briefing-bot"
+          git config user.email "bot@daily-briefing"
+          git add data/
+          git diff --cached --quiet || git commit -m "chore: update seen articles"
+          git push
