@@ -124,8 +124,10 @@ def build_morning_card(
 ) -> dict:
     elements = []
 
-    # 天气 + 日期 头部
-    header_text = f"📅 早报 · {date_str}"
+    # 头部：早报 + 日期
+    header_text = f"☀️ 早报 · {date_str}"
+
+    # 天气信息独立一行
     if weather:
         city = weather.get("city", "")
         temp_min = weather.get("temp_min", "--")
@@ -133,8 +135,10 @@ def build_morning_card(
         condition_day = weather.get("condition_day", "") or weather.get("condition", "")
         wind_dir = weather.get("wind_dir", "")
         wind_scale = weather.get("wind_scale", "")
-        wind_text = f" {wind_dir}{wind_scale}级" if wind_dir else ""
-        header_text = f"☀️ 早报 · {date_str} · {city} {condition_day} {temp_min}~{temp_max}°C{wind_text}"
+        wind_text = f" | {wind_dir}{wind_scale}级" if wind_dir else ""
+        weather_md = f"📍 {city} · {condition_day} {temp_min}~{temp_max}°C{wind_text}"
+        elements.append({"tag": "markdown", "content": weather_md})
+        elements.append({"tag": "hr"})
 
     # 全行业资讯
     general_md = "**━━ 全行业资讯 ━━**\n"
