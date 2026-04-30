@@ -12,7 +12,7 @@ bilibili:
   count: 5
 
 schedule:
-  morning: "08:00"
+  morning: "07:20"
   afternoon: "12:00"
   timezone: "Asia/Shanghai"
 
