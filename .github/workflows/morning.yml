@@ -20,16 +20,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Create .env
-        run: |
-          cat << EOF > .env
-          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-          OPENAI_BASE_URL=${{ secrets.OPENAI_BASE_URL }}
-          FEISHU_APP_ID=${{ secrets.FEISHU_APP_ID }}
-          FEISHU_APP_SECRET=${{ secrets.FEISHU_APP_SECRET }}
-          FEISHU_RECEIVE_ID=${{ secrets.FEISHU_RECEIVE_ID }}
-          QWEATHER_API_KEY=${{ secrets.QWEATHER_API_KEY }}
-          EOF
-
       - name: Run morning briefing
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}
+          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+          FEISHU_RECEIVE_ID: ${{ secrets.FEISHU_RECEIVE_ID }}
+          QWEATHER_API_KEY: ${{ secrets.QWEATHER_API_KEY }}
         run: python src/morning.py
