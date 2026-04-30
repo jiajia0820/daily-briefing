@@ -8,6 +8,11 @@ TIMEOUT = 10
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
 }
+BILI_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "Referer": "https://www.bilibili.com",
+    "Cookie": "buvid3=daily-briefing",
+}
 
 
 def search_zhihu(keyword: str, count: int = 1) -> list[dict]:
@@ -34,7 +39,28 @@ def search_zhihu(keyword: str, count: int = 1) -> list[dict]:
         return []
 
 
-def search_xiaohongshu(keyword: str, count: int = 1) -> list[dict]:
-    from urllib.parse import quote
-    url = f"https://www.xiaohongshu.com/search_result?keyword={quote(keyword)}"
-    return [{"title": f"搜索「{keyword}」", "url": url}]
+def search_bilibili(keyword: str, count: int = 1) -> list[dict]:
+    try:
+        resp = requests.get(
+            "https://api.bilibili.com/x/web-interface/wbi/search/type",
+            params={"search_type": "video", "keyword": keyword, "page": 1},
+            headers=BILI_HEADERS,
+            timeout=TIMEOUT,
+        )
+        resp.raise_for_status()
+        items = resp.json().get("data", {}).get("result", [])
+        results = []
+        for item in items:
+            bvid = item.get("bvid", "")
+            title = item.get("title", "").replace('<em class="keyword">', "").replace("</em>", "")
+            if bvid and title:
+                results.append({
+                    "title": title,
+                    "url": f"https://www.bilibili.com/video/{bvid}",
+                })
+                if len(results) >= count:
+                    break
+        return results
+    except Exception as e:
+        logger.warning(f"B站搜索失败 ({keyword}): {e}")
+        return []

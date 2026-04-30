@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from src.utils.llm_client import chat_completion
 from src.utils.logger import get_logger
-from src.utils.web_searcher import search_zhihu, search_xiaohongshu
+from src.utils.web_searcher import search_zhihu, search_bilibili
 
 logger = get_logger("llm_generator")
 
@@ -94,9 +94,9 @@ def generate_tip(
             zhihu = search_zhihu(topic_kw, count=1)
             if zhihu:
                 links.append({"platform": "知乎", **zhihu[0]})
-            xhs = search_xiaohongshu(topic_kw, count=1)
-            if xhs:
-                links.append({"platform": "小红书", **xhs[0]})
+            bili = search_bilibili(topic_kw, count=1)
+            if bili:
+                links.append({"platform": "B站", **bili[0]})
         result["links"] = links
         return result
     except json.JSONDecodeError as e:
