@@ -34,8 +34,11 @@ ai:
 
 podcast:
   - name: "硅谷101"
-    url: "https://feed.xyzfm.space/xxxx"
+    pid: "5e5c52c9418a84a04625e6cc"
+    platform: "xiaoyuzhoufm"
+  - name: "声动早咖啡"
+    pid: "60de7c003dd577b40d5a40f3"
     platform: "xiaoyuzhoufm"
   - name: "What's Next|科技早知道"
-    url: "https://feed.xyzfm.space/xxxx"
+    pid: "5e74b52c418a84a046ecaceb"
     platform: "xiaoyuzhoufm"
