@@ -95,6 +95,9 @@ def main():
         all_articles, category="全行业", count=5, model=model, api_key=api_key, base_url=base_url
     )
 
+    # 排除已被全行业选中的 URL
+    general_selected_urls = {a["url"] for a in general_top5}
+
     interests = config.get("interests", [])
     interest_top5 = {}
     for interest in interests:
@@ -110,8 +113,8 @@ def main():
             title = a.get("title", "")
             if any(kw in title for kw in keywords):
                 pool.append(a)
-        # 去重
-        seen_urls = set()
+        # 去重 + 排除全行业已选
+        seen_urls = set(general_selected_urls)
         unique_pool = []
         for a in pool:
             if a["url"] not in seen_urls:
