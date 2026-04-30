@@ -1,0 +1,29 @@
+user:
+  city: "北京"
+
+interests:
+  - name: "AI"
+    keywords: ["人工智能", "大模型", "LLM", "AI Agent", "GPT", "深度学习", "机器学习", "Claude", "OpenAI", "DeepSeek"]
+  - name: "企业招聘"
+    keywords: ["招聘", "HR", "人才", "求职", "用工", "面试", "猎头", "人力资源", "校招", "社招"]
+
+schedule:
+  morning: "08:00"
+  afternoon: "12:00"
+  timezone: "Asia/Shanghai"
+
+publisher:
+  feishu:
+    webhook_url: "${FEISHU_WEBHOOK}"
+
+llm:
+  provider: "openai"
+  model: "gpt-4o-mini"
+  api_key: "${OPENAI_API_KEY}"
+
+weather:
+  provider: "qweather"
+  api_key: "${QWEATHER_API_KEY}"
+
+dedup:
+  retention_days: 7
