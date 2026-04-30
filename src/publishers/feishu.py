@@ -232,7 +232,7 @@ def build_afternoon_card(
 
     card = {
         "header": {
-            "title": {"tag": "plain_text", "content": f"🧠 午报 · {date_str}"},
+            "title": {"tag": "plain_text", "content": f"📬 午报 · {date_str}"},
             "template": "purple",
         },
         "elements": elements,
