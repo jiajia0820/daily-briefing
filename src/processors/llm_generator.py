@@ -107,6 +107,60 @@ def generate_tip(
         return {"content": f"今日{config['name']}生成失败", "link": "", "topic": ""}
 
 
+def summarize_github_repos(
+    repos: list[dict],
+    model: str = "gpt-5.5",
+    api_key: str = None,
+    base_url: str = None,
+) -> list[dict]:
+    if not repos:
+        return []
+
+    key = api_key or os.getenv("OPENAI_API_KEY", "")
+    if not key:
+        logger.warning("OPENAI_API_KEY 未设置，无法生成 GitHub 摘要")
+        return repos
+
+    repo_list = "\n".join(
+        f"{i+1}. {r['name']} ({r.get('language','')}) — {r.get('description','无描述')} | 今日 {r.get('stars_today','?')}"
+        for i, r in enumerate(repos)
+    )
+
+    prompt = f"""你是一位技术编辑。请为以下 GitHub 热门项目各写一句中文摘要（30-50字），说明：这是什么、用什么方法解决什么问题。
+
+项目列表：
+{repo_list}
+
+请严格返回 JSON 数组，格式如下，不要返回任何其他内容：
+[{{"index": 1, "summary": "一句话中文摘要"}}]
+
+返回 {len(repos)} 条，不多不少。"""
+
+    try:
+        content = chat_completion(
+            messages=[{"role": "user", "content": prompt}],
+            model=model,
+            api_key=key,
+            base_url=base_url,
+            temperature=0.3,
+            max_tokens=1000,
+        )
+        content = content.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+        summaries = json.loads(content)
+        if isinstance(summaries, list):
+            for item in summaries:
+                idx = item.get("index", 0) - 1
+                if 0 <= idx < len(repos):
+                    repos[idx]["summary"] = item.get("summary", "")
+            logger.info(f"GitHub 项目摘要生成成功: {len(summaries)} 条")
+        return repos
+    except Exception as e:
+        logger.warning(f"GitHub 摘要生成失败 ({e})，使用原始描述")
+        for r in repos:
+            r.setdefault("summary", r.get("description", ""))
+        return repos
+
+
 def _load_history(topic_type: str) -> list[str]:
     try:
         if HISTORY_PATH.exists():

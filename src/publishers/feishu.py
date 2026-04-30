@@ -191,6 +191,7 @@ def build_morning_card(
 def build_afternoon_card(
     tips: list[dict],
     date_str: str = "",
+    github_repos: list[dict] = None,
 ) -> dict:
     elements = []
 
@@ -212,8 +213,22 @@ def build_afternoon_card(
                 if url:
                     tip_md += f"\n- [{platform} · {title}]({url})"
         elements.append({"tag": "markdown", "content": tip_md})
-        if i < len(tips) - 1:
-            elements.append({"tag": "hr"})
+        elements.append({"tag": "hr"})
+
+    # GitHub 热门项目
+    if github_repos:
+        gh_md = "**━━ 🔥 GitHub 热门项目 ━━**\n"
+        for r in github_repos:
+            name = r.get("name", "")
+            url = r.get("url", "")
+            summary = r.get("summary", r.get("description", ""))
+            lang = r.get("language", "")
+            stars = r.get("stars_today", "")
+            lang_tag = f"`{lang}` " if lang else ""
+            stars_tag = f" ⭐ {stars}" if stars else ""
+            gh_md += f"\n**[{name}]({url})**{stars_tag}\n"
+            gh_md += f"{lang_tag}{summary}\n"
+        elements.append({"tag": "markdown", "content": gh_md})
 
     card = {
         "header": {

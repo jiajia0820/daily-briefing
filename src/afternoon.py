@@ -8,7 +8,8 @@ from dotenv import load_dotenv
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.processors.llm_generator import generate_tip
+from src.processors.llm_generator import generate_tip, summarize_github_repos
+from src.fetchers.github_fetcher import fetch_trending_repos
 from src.publishers.feishu import build_afternoon_card, send_feishu_card
 from src.utils.logger import get_logger
 
@@ -59,13 +60,19 @@ def main():
 
     tips = [ai_tip, psychology, brand]
 
-    # 2. 组装飞书卡片
-    logger.info("--- 步骤 4: 组装飞书卡片 ---")
-    date_str = datetime.now().strftime("%Y年%m月%d日")
-    card = build_afternoon_card(tips=tips, date_str=date_str)
+    # 2. GitHub 热门项目
+    logger.info("--- 步骤 4: GitHub 热门项目 ---")
+    repos = fetch_trending_repos(count=5)
+    if repos:
+        repos = summarize_github_repos(repos, model=model, api_key=api_key, base_url=base_url)
 
-    # 3. 推送
-    logger.info("--- 步骤 5: 飞书推送 ---")
+    # 3. 组装飞书卡片
+    logger.info("--- 步骤 5: 组装飞书卡片 ---")
+    date_str = datetime.now().strftime("%Y年%m月%d日")
+    card = build_afternoon_card(tips=tips, date_str=date_str, github_repos=repos)
+
+    # 4. 推送
+    logger.info("--- 步骤 6: 飞书推送 ---")
     feishu_config = config.get("publisher", {}).get("feishu", {})
     send_feishu_card(card, feishu_config)
 
