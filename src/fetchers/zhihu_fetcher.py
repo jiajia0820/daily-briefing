@@ -1,30 +1,28 @@
 import requests
+from bs4 import BeautifulSoup
 from src.utils.logger import get_logger
 
 logger = get_logger("zhihu_fetcher")
 
-ZHIHU_HOT_API = "https://www.zhihu.com/api/v3/feed/topstory/hot-lists/total"
+TOPHUB_ZHIHU = "https://tophub.today/n/mproPpoq6O"
 TIMEOUT = 10
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+}
 
 
 def fetch_zhihu_hot(limit: int = 30) -> list[dict]:
     try:
         logger.info("知乎热榜: 正在抓取")
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            "Referer": "https://www.zhihu.com/hot",
-        }
-        resp = requests.get(ZHIHU_HOT_API, headers=headers, timeout=TIMEOUT)
+        resp = requests.get(TOPHUB_ZHIHU, headers=HEADERS, timeout=TIMEOUT)
         resp.raise_for_status()
-        data = resp.json()
-        items = data.get("data", [])
+        soup = BeautifulSoup(resp.text, "html.parser")
+        links = soup.select("table tr td.al a")
         articles = []
-        for item in items[:limit]:
-            target = item.get("target", {})
-            title = target.get("title", "").strip()
-            question_id = target.get("id", "")
-            url = f"https://www.zhihu.com/question/{question_id}" if question_id else ""
-            if title and url:
+        for a in links[:limit]:
+            title = a.get_text(strip=True)
+            url = a.get("href", "")
+            if title and url and "zhihu.com" in url:
                 articles.append({
                     "title": title,
                     "url": url,
