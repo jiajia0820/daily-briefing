@@ -14,7 +14,11 @@ schedule:
 
 publisher:
   feishu:
-    webhook_url: "${FEISHU_WEBHOOK}"
+    mode: "app"  # "app" 使用飞书应用, "webhook" 使用群机器人
+    app_id: "${FEISHU_APP_ID}"
+    app_secret: "${FEISHU_APP_SECRET}"
+    receive_id_type: "open_id"  # open_id / user_id / union_id / chat_id
+    receive_id: "${FEISHU_RECEIVE_ID}"
 
 llm:
   provider: "openai"

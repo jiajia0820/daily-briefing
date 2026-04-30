@@ -160,11 +160,8 @@ def main():
 
     # 11. 推送
     logger.info("--- 步骤 11: 飞书推送 ---")
-    webhook_url = config.get("publisher", {}).get("feishu", {}).get("webhook_url", "")
-    if not webhook_url:
-        logger.error("飞书 Webhook URL 未配置，跳过推送")
-    else:
-        send_feishu_card(webhook_url, card)
+    feishu_config = config.get("publisher", {}).get("feishu", {})
+    send_feishu_card(card, feishu_config)
 
     logger.info("========== 早报完成 ==========")
 

@@ -22,7 +22,9 @@ jobs:
         run: python src/morning.py
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+          FEISHU_RECEIVE_ID: ${{ secrets.FEISHU_RECEIVE_ID }}
           QWEATHER_API_KEY: ${{ secrets.QWEATHER_API_KEY }}
 
       - name: Commit dedup data

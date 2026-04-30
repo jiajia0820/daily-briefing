@@ -8,8 +8,82 @@ logger = get_logger("feishu")
 MAX_RETRIES = 2
 RETRY_DELAY = 5
 
+# 飞书 API
+TOKEN_URL = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal"
+MESSAGE_URL = "https://open.feishu.cn/open-apis/im/v1/messages"
 
-def send_feishu_card(webhook_url: str, card: dict) -> bool:
+
+def _get_tenant_access_token(app_id: str, app_secret: str) -> str:
+    resp = requests.post(
+        TOKEN_URL,
+        json={"app_id": app_id, "app_secret": app_secret},
+        timeout=10,
+    )
+    resp.raise_for_status()
+    data = resp.json()
+    if data.get("code") != 0:
+        raise Exception(f"获取 token 失败: {data.get('msg', '')}")
+    token = data.get("tenant_access_token", "")
+    logger.info("飞书 tenant_access_token 获取成功")
+    return token
+
+
+def send_feishu_card(card: dict, feishu_config: dict) -> bool:
+    mode = feishu_config.get("mode", "app")
+    if mode == "webhook":
+        return _send_via_webhook(feishu_config.get("webhook_url", ""), card)
+    else:
+        return _send_via_app(card, feishu_config)
+
+
+def _send_via_app(card: dict, feishu_config: dict) -> bool:
+    app_id = feishu_config.get("app_id", "")
+    app_secret = feishu_config.get("app_secret", "")
+    receive_id = feishu_config.get("receive_id", "")
+    receive_id_type = feishu_config.get("receive_id_type", "open_id")
+
+    if not all([app_id, app_secret, receive_id]):
+        logger.error("飞书应用配置不完整（需要 app_id, app_secret, receive_id）")
+        return False
+
+    for attempt in range(MAX_RETRIES + 1):
+        try:
+            token = _get_tenant_access_token(app_id, app_secret)
+            payload = {
+                "receive_id": receive_id,
+                "msg_type": "interactive",
+                "content": json.dumps(card),
+            }
+            resp = requests.post(
+                MESSAGE_URL,
+                params={"receive_id_type": receive_id_type},
+                json=payload,
+                headers={
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                timeout=10,
+            )
+            resp.raise_for_status()
+            result = resp.json()
+            if result.get("code") == 0:
+                logger.info("飞书应用推送成功")
+                return True
+            else:
+                logger.warning(f"飞书返回异常: code={result.get('code')}, msg={result.get('msg', '')}")
+        except Exception as e:
+            logger.warning(f"飞书推送失败 (第 {attempt+1} 次): {e}")
+        if attempt < MAX_RETRIES:
+            logger.info(f"等待 {RETRY_DELAY}s 后重试...")
+            time.sleep(RETRY_DELAY)
+    logger.error("飞书推送最终失败，已达最大重试次数")
+    return False
+
+
+def _send_via_webhook(webhook_url: str, card: dict) -> bool:
+    if not webhook_url:
+        logger.error("飞书 Webhook URL 未配置")
+        return False
     payload = {
         "msg_type": "interactive",
         "card": card,
@@ -25,7 +99,7 @@ def send_feishu_card(webhook_url: str, card: dict) -> bool:
             resp.raise_for_status()
             result = resp.json()
             if result.get("code") == 0 or result.get("StatusCode") == 0:
-                logger.info("飞书推送成功")
+                logger.info("飞书 Webhook 推送成功")
                 return True
             else:
                 logger.warning(f"飞书返回异常: {result}")
