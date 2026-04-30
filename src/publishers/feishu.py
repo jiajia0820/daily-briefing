@@ -202,9 +202,15 @@ def build_afternoon_card(
         icon = section_icons[i] if i < len(section_icons) else "📌"
         tip_md = f"**━━ {icon} {name} ━━**\n"
         tip_md += tip.get("content", "")
-        link = tip.get("link", "")
-        if link:
-            tip_md += f"\n\n📖 [延伸阅读]({link})"
+        links = tip.get("links", [])
+        if links:
+            tip_md += "\n\n📖 延伸阅读："
+            for lk in links:
+                platform = lk.get("platform", "")
+                title = lk.get("title", "链接")[:30]
+                url = lk.get("url", "")
+                if url:
+                    tip_md += f"\n- [{platform} · {title}]({url})"
         elements.append({"tag": "markdown", "content": tip_md})
         if i < len(tips) - 1:
             elements.append({"tag": "hr"})
