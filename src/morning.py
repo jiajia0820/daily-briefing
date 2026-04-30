@@ -11,6 +11,9 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.fetchers.rss_fetcher import fetch_rss
 from src.fetchers.zhihu_fetcher import fetch_zhihu_hot
+from src.fetchers.weather_fetcher import fetch_weather
+from src.fetchers.quote_fetcher import fetch_quote
+from src.fetchers.podcast_fetcher import fetch_podcast
 from src.processors.llm_selector import select_articles
 from src.publishers.feishu import build_morning_card, send_feishu_card
 from src.utils.logger import get_logger
@@ -111,17 +114,35 @@ def main():
             model=model, api_key=api_key
         )
 
-    # 5. 组装飞书卡片
-    logger.info("--- 步骤 5: 组装飞书卡片 ---")
+    # 5. 天气
+    logger.info("--- 步骤 5: 获取天气 ---")
+    city = config.get("user", {}).get("city", "北京")
+    weather_key = config.get("weather", {}).get("api_key", "")
+    weather = fetch_weather(city, api_key=weather_key)
+
+    # 6. 每日一句
+    logger.info("--- 步骤 6: 每日一句 ---")
+    quote = fetch_quote()
+
+    # 7. 播客推荐
+    logger.info("--- 步骤 7: 播客推荐 ---")
+    podcast_sources = rss_sources.get("podcast", [])
+    podcast = fetch_podcast(podcast_sources)
+
+    # 8. 组装飞书卡片
+    logger.info("--- 步骤 8: 组装飞书卡片 ---")
     date_str = datetime.now().strftime("%Y年%m月%d日")
     card = build_morning_card(
         general_news=general_top5,
         interest_news=interest_top5,
+        weather=weather,
+        quote=quote,
+        podcast=podcast,
         date_str=date_str,
     )
 
-    # 6. 推送
-    logger.info("--- 步骤 6: 飞书推送 ---")
+    # 9. 推送
+    logger.info("--- 步骤 9: 飞书推送 ---")
     webhook_url = config.get("publisher", {}).get("feishu", {}).get("webhook_url", "")
     if not webhook_url:
         logger.error("飞书 Webhook URL 未配置，跳过推送")
