@@ -1,6 +1,6 @@
 import json
 import os
-from openai import OpenAI
+from src.utils.llm_client import chat_completion
 from src.utils.logger import get_logger
 
 logger = get_logger("llm_selector")
@@ -50,18 +50,14 @@ def select_articles(
 只返回 {count} 篇，不多不少。"""
 
     try:
-        client_kwargs = {"api_key": key}
-        url = base_url or os.getenv("OPENAI_BASE_URL", "")
-        if url:
-            client_kwargs["base_url"] = url
-        client = OpenAI(**client_kwargs)
-        response = client.chat.completions.create(
-            model=model,
+        content = chat_completion(
             messages=[{"role": "user", "content": prompt}],
+            model=model,
+            api_key=key,
+            base_url=base_url,
             temperature=0.3,
             max_tokens=1000,
         )
-        content = response.choices[0].message.content.strip()
         content = content.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
         selected = json.loads(content)
         if isinstance(selected, list) and len(selected) > 0:

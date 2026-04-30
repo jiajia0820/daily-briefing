@@ -1,7 +1,7 @@
 import json
 import os
 from pathlib import Path
-from openai import OpenAI
+from src.utils.llm_client import chat_completion
 from src.utils.logger import get_logger
 
 logger = get_logger("llm_generator")
@@ -76,18 +76,14 @@ def generate_tip(
     prompt = config["prompt"].format(history=history_str)
 
     try:
-        client_kwargs = {"api_key": key}
-        url = base_url or os.getenv("OPENAI_BASE_URL", "")
-        if url:
-            client_kwargs["base_url"] = url
-        client = OpenAI(**client_kwargs)
-        response = client.chat.completions.create(
-            model=model,
+        content = chat_completion(
             messages=[{"role": "user", "content": prompt}],
+            model=model,
+            api_key=key,
+            base_url=base_url,
             temperature=0.7,
             max_tokens=500,
         )
-        content = response.choices[0].message.content.strip()
         content = content.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
         result = json.loads(content)
         logger.info(f"午报内容生成成功 ({topic_type}): {result.get('topic', '')}")

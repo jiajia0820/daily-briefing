@@ -1,5 +1,6 @@
 user:
-  city: "北京"
+  city: "鼓楼"
+  city_adm: "南京"
 
 interests:
   - name: "AI"
@@ -29,6 +30,7 @@ llm:
 weather:
   provider: "qweather"
   api_key: "${QWEATHER_API_KEY}"
+  api_host: "jt52qd3e2a.re.qweatherapi.com"
 
 dedup:
   retention_days: 7

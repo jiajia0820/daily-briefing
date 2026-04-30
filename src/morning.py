@@ -134,9 +134,13 @@ def main():
 
     # 7. 天气
     logger.info("--- 步骤 7: 获取天气 ---")
-    city = config.get("user", {}).get("city", "北京")
-    weather_key = config.get("weather", {}).get("api_key", "")
-    weather = fetch_weather(city, api_key=weather_key)
+    city = config.get("user", {}).get("city", "鼓楼")
+    weather_cfg = config.get("weather", {})
+    weather = fetch_weather(
+        city,
+        api_key=weather_cfg.get("api_key", ""),
+        api_host=weather_cfg.get("api_host", ""),
+    )
 
     # 8. 每日一句
     logger.info("--- 步骤 8: 每日一句 ---")
