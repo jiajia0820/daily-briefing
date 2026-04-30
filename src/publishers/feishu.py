@@ -128,9 +128,13 @@ def build_morning_card(
     header_text = f"📅 早报 · {date_str}"
     if weather:
         city = weather.get("city", "")
-        temp = weather.get("temp", "--")
-        condition = weather.get("condition", "")
-        header_text = f"☀️ 早报 · {date_str} · {city} {condition} {temp}°C"
+        temp_min = weather.get("temp_min", "--")
+        temp_max = weather.get("temp_max", "--")
+        condition_day = weather.get("condition_day", "") or weather.get("condition", "")
+        wind_dir = weather.get("wind_dir", "")
+        wind_scale = weather.get("wind_scale", "")
+        wind_text = f" {wind_dir}{wind_scale}级" if wind_dir else ""
+        header_text = f"☀️ 早报 · {date_str} · {city} {condition_day} {temp_min}~{temp_max}°C{wind_text}"
 
     # 全行业资讯
     general_md = "**━━ 全行业资讯 ━━**\n"

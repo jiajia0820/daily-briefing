@@ -48,15 +48,35 @@ def fetch_weather(city: str, api_key: str = None, api_host: str = None, location
         weather_data = weather_resp.json()
         now = weather_data.get("now", {})
 
+        # 3. 获取当日预报（温度范围 + 白天风力）
+        forecast_url = f"https://{host}/v7/weather/3d"
+        forecast_resp = requests.get(
+            forecast_url,
+            params={"location": location_id},
+            headers=headers,
+            timeout=TIMEOUT,
+        )
+        forecast_resp.raise_for_status()
+        forecast_data = forecast_resp.json()
+        today = forecast_data.get("daily", [{}])[0]
+
         result = {
             "city": city_name,
             "temp": now.get("temp", "--"),
+            "temp_min": today.get("tempMin", "--"),
+            "temp_max": today.get("tempMax", "--"),
             "condition": now.get("text", ""),
+            "condition_day": today.get("textDay", ""),
+            "condition_night": today.get("textNight", ""),
             "humidity": now.get("humidity", ""),
-            "wind_dir": now.get("windDir", ""),
-            "wind_scale": now.get("windScale", ""),
+            "wind_dir": today.get("windDirDay", now.get("windDir", "")),
+            "wind_scale": today.get("windScaleDay", now.get("windScale", "")),
         }
-        logger.info(f"天气获取成功: {city_name} {result['condition']} {result['temp']}°C")
+        logger.info(
+            f"天气获取成功: {city_name} {result['condition_day']} "
+            f"{result['temp_min']}~{result['temp_max']}°C "
+            f"{result['wind_dir']}{result['wind_scale']}级"
+        )
         return result
 
     except requests.exceptions.Timeout:
@@ -71,7 +91,11 @@ def _fallback(city: str) -> dict:
     return {
         "city": city,
         "temp": "--",
+        "temp_min": "--",
+        "temp_max": "--",
         "condition": "暂不可用",
+        "condition_day": "",
+        "condition_night": "",
         "humidity": "",
         "wind_dir": "",
         "wind_scale": "",
