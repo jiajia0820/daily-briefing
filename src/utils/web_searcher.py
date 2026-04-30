@@ -10,35 +10,31 @@ HEADERS = {
 }
 
 
-def search_related(keyword: str, site: str = "", count: int = 1) -> list[dict]:
-    query = f"site:{site} {keyword}" if site else keyword
+def search_zhihu(keyword: str, count: int = 1) -> list[dict]:
     try:
         resp = requests.get(
             "https://cn.bing.com/search",
-            params={"q": query},
+            params={"q": f"site:zhihu.com {keyword}"},
             headers=HEADERS,
             timeout=TIMEOUT,
         )
         resp.raise_for_status()
         soup = BeautifulSoup(resp.text, "html.parser")
-        links = soup.select("h2 a")
         results = []
-        for a in links:
+        for a in soup.select("h2 a"):
             href = a.get("href", "")
             title = a.get_text(strip=True)
-            if href and title and href.startswith("http"):
+            if href and title and "zhihu.com" in href:
                 results.append({"title": title, "url": href})
                 if len(results) >= count:
                     break
         return results
     except Exception as e:
-        logger.warning(f"搜索失败 ({site or 'web'}, {keyword}): {e}")
+        logger.warning(f"知乎搜索失败 ({keyword}): {e}")
         return []
 
 
-def search_zhihu(keyword: str, count: int = 1) -> list[dict]:
-    return search_related(keyword, site="zhihu.com", count=count)
-
-
 def search_xiaohongshu(keyword: str, count: int = 1) -> list[dict]:
-    return search_related(keyword, site="xiaohongshu.com", count=count)
+    from urllib.parse import quote
+    url = f"https://www.xiaohongshu.com/search_result?keyword={quote(keyword)}"
+    return [{"title": f"搜索「{keyword}」", "url": url}]
