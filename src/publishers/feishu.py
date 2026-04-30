@@ -115,6 +115,8 @@ def _send_via_webhook(webhook_url: str, card: dict) -> bool:
 def build_morning_card(
     general_news: list[dict],
     interest_news: dict[str, list[dict]],
+    bilibili_videos: list[dict] = None,
+    bili_section_name: str = "",
     weather: dict = None,
     quote: dict = None,
     podcast: dict = None,
@@ -143,6 +145,15 @@ def build_morning_card(
         for i, a in enumerate(news_list, 1):
             interest_md += f"{i}. [{a['title']}]({a['url']})\n"
         elements.append({"tag": "markdown", "content": interest_md})
+        elements.append({"tag": "hr"})
+
+    # B站视频推荐
+    if bilibili_videos:
+        section_name = bili_section_name or "求职就业"
+        bili_md = f"**━━ 🎬 {section_name} · B站视频 ━━**\n"
+        for i, v in enumerate(bilibili_videos, 1):
+            bili_md += f"{i}. [{v['title']}]({v['url']})\n"
+        elements.append({"tag": "markdown", "content": bili_md})
         elements.append({"tag": "hr"})
 
     # 播客推荐

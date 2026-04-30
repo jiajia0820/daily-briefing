@@ -5,8 +5,11 @@ user:
 interests:
   - name: "AI"
     keywords: ["人工智能", "大模型", "LLM", "AI Agent", "GPT", "深度学习", "机器学习", "Claude", "OpenAI", "DeepSeek"]
-  - name: "求职就业"
-    keywords: ["求职", "招聘", "校招", "就业", "应届生", "大学生", "毕业", "实习", "秋招", "春招", "offer", "面试", "简历", "薪资", "考公", "考研", "人才", "职场", "裁员", "失业率", "就业率", "用人", "岗位", "劳动力", "人力资源", "职业规划", "转行"]
+
+bilibili:
+  name: "求职就业"
+  search_keywords: ["大学生求职", "应届生面试", "校招攻略", "简历指导", "就业指导"]
+  count: 5
 
 schedule:
   morning: "08:00"

@@ -14,6 +14,7 @@ from src.fetchers.zhihu_fetcher import fetch_zhihu_hot
 from src.fetchers.weather_fetcher import fetch_weather
 from src.fetchers.quote_fetcher import fetch_quote
 from src.fetchers.podcast_fetcher import fetch_podcast
+from src.fetchers.bilibili_fetcher import fetch_bilibili_videos
 from src.processors.llm_selector import select_articles
 from src.publishers.feishu import build_morning_card, send_feishu_card
 from src.utils.logger import get_logger
@@ -126,11 +127,27 @@ def main():
             model=model, api_key=api_key, base_url=base_url
         )
 
+    # 5b. B站求职视频
+    bilibili_videos = []
+    bili_config = config.get("bilibili", {})
+    if bili_config:
+        logger.info("--- 步骤 5b: B站求职视频 ---")
+        bili_keywords = bili_config.get("search_keywords", [])
+        bili_count = bili_config.get("count", 5)
+        bili_pool = fetch_bilibili_videos(bili_keywords, count=bili_count * 3)
+        bili_pool = filter_unseen(bili_pool, seen_data)
+        if bili_pool:
+            bilibili_videos = select_articles(
+                bili_pool, category=bili_config.get("name", "求职就业"),
+                count=bili_count, model=model, api_key=api_key, base_url=base_url
+            )
+
     # 6. 记录已推送文章
     logger.info("--- 步骤 6: 记录已推送 ---")
     all_selected = list(general_top5)
     for news_list in interest_top5.values():
         all_selected.extend(news_list)
+    all_selected.extend(bilibili_videos)
     mark_seen(all_selected, seen_data)
     seen_data = cleanup_old(seen_data, config.get("dedup", {}).get("retention_days", 7))
     save_seen(seen_data)
@@ -160,6 +177,8 @@ def main():
     card = build_morning_card(
         general_news=general_top5,
         interest_news=interest_top5,
+        bilibili_videos=bilibili_videos,
+        bili_section_name=bili_config.get("name", "求职就业") if bili_config else "",
         weather=weather,
         quote=quote,
         podcast=podcast,
