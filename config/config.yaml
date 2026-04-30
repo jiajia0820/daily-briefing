@@ -22,8 +22,9 @@ publisher:
 
 llm:
   provider: "openai"
-  model: "gpt-4o-mini"
+  model: "gpt-5.5"
   api_key: "${OPENAI_API_KEY}"
+  base_url: "${OPENAI_BASE_URL}"
 
 weather:
   provider: "qweather"

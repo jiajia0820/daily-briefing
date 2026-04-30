@@ -87,11 +87,12 @@ def main():
     # 5. GPT 选稿
     logger.info("--- 步骤 5: GPT 选稿 ---")
     llm_config = config.get("llm", {})
-    model = llm_config.get("model", "gpt-4o-mini")
+    model = llm_config.get("model", "gpt-5.5")
     api_key = llm_config.get("api_key", "")
+    base_url = llm_config.get("base_url", "")
 
     general_top5 = select_articles(
-        all_articles, category="全行业", count=5, model=model, api_key=api_key
+        all_articles, category="全行业", count=5, model=model, api_key=api_key, base_url=base_url
     )
 
     interests = config.get("interests", [])
@@ -119,7 +120,7 @@ def main():
 
         interest_top5[name] = select_articles(
             unique_pool, category=name, keywords=keywords, count=5,
-            model=model, api_key=api_key
+            model=model, api_key=api_key, base_url=base_url
         )
 
     # 6. 记录已推送文章

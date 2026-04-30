@@ -11,8 +11,9 @@ def select_articles(
     category: str,
     keywords: list[str] = None,
     count: int = 5,
-    model: str = "gpt-4o-mini",
+    model: str = "gpt-5.5",
     api_key: str = None,
+    base_url: str = None,
 ) -> list[dict]:
     if not articles:
         logger.warning("没有文章可供选择")
@@ -49,7 +50,11 @@ def select_articles(
 只返回 {count} 篇，不多不少。"""
 
     try:
-        client = OpenAI(api_key=key)
+        client_kwargs = {"api_key": key}
+        url = base_url or os.getenv("OPENAI_BASE_URL", "")
+        if url:
+            client_kwargs["base_url"] = url
+        client = OpenAI(**client_kwargs)
         response = client.chat.completions.create(
             model=model,
             messages=[{"role": "user", "content": prompt}],

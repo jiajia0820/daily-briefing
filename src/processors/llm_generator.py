@@ -57,8 +57,9 @@ TOPIC_CONFIGS = {
 
 def generate_tip(
     topic_type: str,
-    model: str = "gpt-4o-mini",
+    model: str = "gpt-5.5",
     api_key: str = None,
+    base_url: str = None,
 ) -> dict:
     key = api_key or os.getenv("OPENAI_API_KEY", "")
     config = TOPIC_CONFIGS.get(topic_type)
@@ -75,7 +76,11 @@ def generate_tip(
     prompt = config["prompt"].format(history=history_str)
 
     try:
-        client = OpenAI(api_key=key)
+        client_kwargs = {"api_key": key}
+        url = base_url or os.getenv("OPENAI_BASE_URL", "")
+        if url:
+            client_kwargs["base_url"] = url
+        client = OpenAI(**client_kwargs)
         response = client.chat.completions.create(
             model=model,
             messages=[{"role": "user", "content": prompt}],

@@ -43,18 +43,19 @@ def main():
     config = load_config()
 
     llm_config = config.get("llm", {})
-    model = llm_config.get("model", "gpt-4o-mini")
+    model = llm_config.get("model", "gpt-5.5")
     api_key = llm_config.get("api_key", "")
+    base_url = llm_config.get("base_url", "")
 
     # 1. 生成三条内容
     logger.info("--- 步骤 1: 生成 AI 技巧 ---")
-    ai_tip = generate_tip("ai_tip", model=model, api_key=api_key)
+    ai_tip = generate_tip("ai_tip", model=model, api_key=api_key, base_url=base_url)
 
     logger.info("--- 步骤 2: 生成心理学/经济学技巧 ---")
-    psychology = generate_tip("psychology", model=model, api_key=api_key)
+    psychology = generate_tip("psychology", model=model, api_key=api_key, base_url=base_url)
 
     logger.info("--- 步骤 3: 生成品牌洞察 ---")
-    brand = generate_tip("brand_insight", model=model, api_key=api_key)
+    brand = generate_tip("brand_insight", model=model, api_key=api_key, base_url=base_url)
 
     tips = [ai_tip, psychology, brand]
 
