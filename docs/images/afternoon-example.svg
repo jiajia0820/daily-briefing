@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="980" viewBox="0 0 420 980" role="img" aria-label="午报示例">
+  <rect width="420" height="980" fill="#f6f8fb"/>
+  <rect x="28" y="24" width="364" height="932" rx="12" fill="#ffffff" stroke="#d9dee8"/>
+  <rect x="28" y="24" width="364" height="58" rx="12" fill="#f0e8ff"/>
+  <text x="48" y="61" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="22" font-weight="700" fill="#7a35c8">📬 午报 · 2026年05月04日</text>
+
+  <text x="66" y="120" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="20" font-weight="700" fill="#111">━━ 🤖 AI 技巧 ━━</text>
+  <text x="52" y="155" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16" fill="#222">让 AI 处理文案时，先给它一段“禁用词/禁用风格”</text>
+  <text x="52" y="181" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16" fill="#222">清单，再要求逐条避开。这样能减少空话和套话。</text>
+  <text x="52" y="226" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16" fill="#1f5fbf">📖 延伸阅读：知乎 / B站</text>
+
+  <line x1="52" y1="265" x2="368" y2="265" stroke="#e3e6ec"/>
+  <text x="58" y="305" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="20" font-weight="700" fill="#111">━━ 🧠 心理学/经济学 ━━</text>
+  <text x="52" y="340" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16" fill="#222">心理账户：人们会把钱按来源或用途分成不同账户，</text>
+  <text x="52" y="366" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16" fill="#222">导致奖金更容易被花掉、工资却更谨慎。</text>
+  <text x="52" y="411" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16" fill="#1f5fbf">📖 延伸阅读：知乎 / B站</text>
+
+  <line x1="52" y1="450" x2="368" y2="450" stroke="#e3e6ec"/>
+  <text x="82" y="490" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="20" font-weight="700" fill="#111">━━ 💡 品牌洞察 ━━</text>
+  <text x="52" y="525" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16" fill="#222">乐高把用户创意纳入产品系统：Ideas 平台让玩家</text>
+  <text x="52" y="551" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16" fill="#222">提交设计、社区投票、官方量产，形成共创增长。</text>
+
+  <line x1="52" y1="610" x2="368" y2="610" stroke="#e3e6ec"/>
+  <text x="66" y="650" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="20" font-weight="700" fill="#111">━━ 🔥 GitHub 热门项目 ━━</text>
+  <text x="52" y="690" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" font-weight="700" fill="#1f5fbf">ruvnet/ruflo ⭐ 1,840 stars today</text>
+  <text x="52" y="716" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15" fill="#222">面向 Claude 的多智能体编排平台，适合复杂自动化。</text>
+  <text x="52" y="764" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" font-weight="700" fill="#1f5fbf">TradingAgents ⭐ 3,313 stars today</text>
+  <text x="52" y="790" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15" fill="#222">用多智能体做金融交易研究，贴近 AI 金融自动化趋势。</text>
+  <text x="52" y="838" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" font-weight="700" fill="#1f5fbf">DeepSeek-TUI ⭐ 343 stars today</text>
+  <text x="52" y="864" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="15" fill="#222">终端里的 DeepSeek 编程助手，适合命令行工作流。</text>
+</svg>

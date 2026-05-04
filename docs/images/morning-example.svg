@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="980" viewBox="0 0 420 980" role="img" aria-label="早报示例">
+  <rect width="420" height="980" fill="#f6f8fb"/>
+  <rect x="28" y="24" width="364" height="932" rx="12" fill="#ffffff" stroke="#d9dee8"/>
+  <rect x="28" y="24" width="364" height="58" rx="12" fill="#e9efff"/>
+  <text x="48" y="61" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="22" font-weight="700" fill="#1f5fbf">☀️ 早报 · 2026年05月04日</text>
+  <text x="52" y="117" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16" fill="#222">📍 鼓楼 · 晴 16~26°C | 东南风1-3级</text>
+
+  <line x1="52" y1="150" x2="368" y2="150" stroke="#e3e6ec"/>
+  <text x="82" y="190" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="19" font-weight="700" fill="#111">━━ 全行业资讯 ━━</text>
+  <text x="56" y="224" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">1. 在硅谷，中美具身公司聊了聊4个问题的解法</text>
+  <text x="56" y="254" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">2. 又一算力独角兽，冲击 IPO</text>
+  <text x="56" y="284" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">3. 大语言模型路线与 AGI 新讨论</text>
+  <text x="56" y="314" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">4. 维生素逆转致命遗传病研究</text>
+  <text x="56" y="344" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">5. 平台治理与市场信任重建</text>
+
+  <line x1="52" y1="380" x2="368" y2="380" stroke="#e3e6ec"/>
+  <text x="90" y="420" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="19" font-weight="700" fill="#111">━━ 知乎热榜 ━━</text>
+  <text x="56" y="454" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">1. 高校教师考核与行政岗位讨论</text>
+  <text x="56" y="484" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">2. 科普话题：国内常见蛇类辨析</text>
+  <text x="56" y="514" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">3. 公司管理方式与员工体验</text>
+
+  <line x1="52" y1="550" x2="368" y2="550" stroke="#e3e6ec"/>
+  <text x="88" y="590" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="19" font-weight="700" fill="#111">━━ AI · 兴趣领域 ━━</text>
+  <text x="56" y="624" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">1. Open-source orchestration spec</text>
+  <text x="56" y="654" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">2. Agentic workflows 新进展</text>
+  <text x="56" y="684" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">3. DeepSeek V4 相关讨论</text>
+  <text x="56" y="714" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">4. Agent Memory 与托管服务</text>
+  <text x="56" y="744" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">5. OpenAI 开源与生态动态</text>
+
+  <line x1="52" y1="780" x2="368" y2="780" stroke="#e3e6ec"/>
+  <text x="76" y="820" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="19" font-weight="700" fill="#111">━━ 🎬 B站热门 · B站视频 ━━</text>
+  <text x="56" y="854" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">1. 热门视频推荐</text>
+  <text x="56" y="884" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" fill="#1f5fbf">2. 今日值得一看的内容</text>
+  <text x="56" y="924" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="16" fill="#333">━━ 播客推荐 / 每日一句 ━━</text>
+</svg>
