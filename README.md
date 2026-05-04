@@ -254,7 +254,18 @@ QWEATHER_API_KEY=your-qweather-key
 
 ### 7. 定时触发
 
-GitHub Actions 自带 cron 有时会延迟。当前推荐使用 cron-job.org 触发 GitHub `repository_dispatch`。
+GitHub Actions 自带 `schedule` cron 适合低精度后台任务，但在免费环境中可能延迟数分钟到几十分钟。日报、提醒、监控这类任务通常更在意“准点”，所以本项目推荐使用外部定时服务 cron-job.org 调用 GitHub `repository_dispatch` API。
+
+这个方法的核心思路是：把“计时”交给外部 cron，把“执行”交给 GitHub Actions。
+
+```text
+cron-job.org
+  -> GitHub repository_dispatch API
+  -> GitHub Actions workflow
+  -> python src/morning.py / src/afternoon.py
+```
+
+这个模式也适合其他需要用 GitHub Actions 免费跑、但又希望尽量准点触发的项目。
 
 请求地址：
 
