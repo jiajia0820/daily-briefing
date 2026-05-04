@@ -68,13 +68,13 @@ RSS：
 ### 早报
 
 <p>
-  <img src="docs/images/morning-example.svg" alt="早报示例" width="360">
+  <img src="docs/images/morning-example.jpg" alt="早报示例" width="360">
 </p>
 
 ### 午报
 
 <p>
-  <img src="docs/images/afternoon-example.svg" alt="午报示例" width="360">
+  <img src="docs/images/afternoon-example.jpg" alt="午报示例" width="360">
 </p>
 
 ## 工作方式

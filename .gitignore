@@ -15,3 +15,5 @@ data/*.json
 !data/*.example.json
 !data/.gitkeep
 CODEX_HANDOFF.md
+/早报.jpg
+/晚报.jpg
