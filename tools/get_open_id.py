@@ -1,8 +1,9 @@
 """获取你的飞书 open_id 的小工具"""
+import os
 import requests
 
-APP_ID = "cli_a966cd54c7a15cd1"
-APP_SECRET = input("请输入 app_secret: ").strip()
+APP_ID = os.getenv("FEISHU_APP_ID") or input("请输入 app_id: ").strip()
+APP_SECRET = os.getenv("FEISHU_APP_SECRET") or input("请输入 app_secret: ").strip()
 IDENTIFIER = input("请输入你的飞书手机号或邮箱: ").strip()
 
 # 1. 获取 token

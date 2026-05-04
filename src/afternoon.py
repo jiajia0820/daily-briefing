@@ -17,7 +17,11 @@ logger = get_logger("afternoon")
 
 
 def load_config() -> dict:
-    config_path = PROJECT_ROOT / "config" / "config.yaml"
+    config_path = PROJECT_ROOT / "config" / "config.local.yaml"
+    if not config_path.exists():
+        config_path = PROJECT_ROOT / "config" / "config.yaml"
+    if not config_path.exists():
+        config_path = PROJECT_ROOT / "config" / "config.example.yaml"
     with open(config_path, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
     _resolve_env(config)
@@ -37,6 +41,10 @@ def _resolve_env(obj):
             _resolve_env(item)
 
 
+def _module_enabled(config: dict, module_name: str, default: bool = True) -> bool:
+    return config.get("modules", {}).get("afternoon", {}).get(module_name, default)
+
+
 def main():
     load_dotenv(PROJECT_ROOT / ".env")
 
@@ -48,21 +56,30 @@ def main():
     api_key = llm_config.get("api_key", "")
     base_url = llm_config.get("base_url", "")
 
-    # 1. 生成三条内容
-    logger.info("--- 步骤 1: 生成 AI 技巧 ---")
-    ai_tip = generate_tip("ai_tip", model=model, api_key=api_key, base_url=base_url)
-
-    logger.info("--- 步骤 2: 生成心理学/经济学技巧 ---")
-    psychology = generate_tip("psychology", model=model, api_key=api_key, base_url=base_url)
-
-    logger.info("--- 步骤 3: 生成品牌洞察 ---")
-    brand = generate_tip("brand_insight", model=model, api_key=api_key, base_url=base_url)
-
-    tips = [ai_tip, psychology, brand]
+    # 1. 生成知识卡片
+    tips = []
+    tip_modules = [
+        ("ai_tip", "AI 技巧", "🤖", "生成 AI 技巧"),
+        ("psychology", "心理学/经济学", "🧠", "生成心理学/经济学技巧"),
+        ("brand_insight", "品牌洞察", "💡", "生成品牌洞察"),
+    ]
+    for topic_type, section_name, section_icon, log_text in tip_modules:
+        if not _module_enabled(config, topic_type, True):
+            logger.info(f"--- {section_name} 模块已关闭 ---")
+            continue
+        logger.info(f"--- {log_text} ---")
+        tip = generate_tip(topic_type, model=model, api_key=api_key, base_url=base_url)
+        tip["section_name"] = section_name
+        tip["section_icon"] = section_icon
+        tips.append(tip)
 
     # 2. GitHub 热门项目
     logger.info("--- 步骤 4: GitHub 热门项目 ---")
-    repos = fetch_trending_repos(count=5)
+    repos = []
+    if _module_enabled(config, "github_trending", True):
+        repos = fetch_trending_repos(count=5)
+    else:
+        logger.info("GitHub Trending 模块已关闭")
     if repos:
         repos = summarize_github_repos(repos, model=model, api_key=api_key, base_url=base_url)
 

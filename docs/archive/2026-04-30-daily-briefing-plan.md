@@ -1,5 +1,7 @@
 # Daily Briefing 实现计划
 
+> 归档说明：这是项目早期实现计划，已经过时，仅用于追溯历史。当前部署和配置请以仓库根目录 `README.md`、`config/config.example.yaml` 和 `.env.example` 为准。
+
 > **For agentic workers:** Execute this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** 构建一个基于 GitHub Actions 的个性化日报推送系统，通过飞书推送早报和午报。
@@ -52,8 +54,8 @@ build/
 - [ ] **Step 3: 创建 .env.example**
 
 ```
-OPENAI_API_KEY=sk-your-key-here
-FEISHU_WEBHOOK=https://open.feishu.cn/open-apis/bot/v2/hook/your-hook-id
+OPENAI_API_KEY=your-openai-api-key
+FEISHU_WEBHOOK=your-feishu-webhook-url
 QWEATHER_API_KEY=your-qweather-key
 ```
 

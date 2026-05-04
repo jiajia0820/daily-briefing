@@ -1,5 +1,7 @@
 # Daily Briefing — 设计文档
 
+> 归档说明：这是项目早期设计文档，已经过时，仅用于追溯历史。当前部署和配置请以仓库根目录 `README.md`、`config/config.example.yaml` 和 `.env.example` 为准。
+
 **日期**：2026-04-30
 **状态**：待审核
 

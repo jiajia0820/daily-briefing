@@ -5,8 +5,8 @@ from src.utils.logger import get_logger
 logger = get_logger("weather_fetcher")
 
 TIMEOUT = 10
-# 和风天气专属 API Host——在 config.yaml 中配置
-DEFAULT_API_HOST = "jt52qd3e2a.re.qweatherapi.com"
+# 和风天气专属 API Host，请在 config.yaml 或 QWEATHER_API_HOST 中配置。
+DEFAULT_API_HOST = ""
 
 
 def fetch_weather(city: str, api_key: str = None, api_host: str = None, location: str = None) -> dict:
@@ -14,6 +14,9 @@ def fetch_weather(city: str, api_key: str = None, api_host: str = None, location
     host = api_host or os.getenv("QWEATHER_API_HOST", DEFAULT_API_HOST)
     if not key:
         logger.warning("QWEATHER_API_KEY 未设置")
+        return _fallback(city)
+    if not host:
+        logger.warning("QWEATHER_API_HOST 未设置")
         return _fallback(city)
 
     headers = {"X-QW-Api-Key": key}

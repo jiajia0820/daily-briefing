@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 .env
+config/config.local.yaml
 .venv/
 venv/
 *.egg-info/
@@ -8,3 +9,9 @@ dist/
 build/
 .idea/
 .vscode/
+body.json
+*.log
+data/*.json
+!data/*.example.json
+!data/.gitkeep
+CODEX_HANDOFF.md

@@ -115,6 +115,7 @@ def _send_via_webhook(webhook_url: str, card: dict) -> bool:
 def build_morning_card(
     general_news: list[dict],
     interest_news: dict[str, list[dict]],
+    zhihu_hot: list[dict] = None,
     bilibili_videos: list[dict] = None,
     bili_section_name: str = "",
     weather: dict = None,
@@ -141,11 +142,20 @@ def build_morning_card(
         elements.append({"tag": "hr"})
 
     # 全行业资讯
-    general_md = "**━━ 全行业资讯 ━━**\n"
-    for i, a in enumerate(general_news, 1):
-        general_md += f"{i}. [{a['title']}]({a['url']})\n"
-    elements.append({"tag": "markdown", "content": general_md})
-    elements.append({"tag": "hr"})
+    if general_news:
+        general_md = "**━━ 全行业资讯 ━━**\n"
+        for i, a in enumerate(general_news, 1):
+            general_md += f"{i}. [{a['title']}]({a['url']})\n"
+        elements.append({"tag": "markdown", "content": general_md})
+        elements.append({"tag": "hr"})
+
+    # 知乎热榜
+    if zhihu_hot:
+        zhihu_md = "**━━ 知乎热榜 ━━**\n"
+        for i, a in enumerate(zhihu_hot, 1):
+            zhihu_md += f"{i}. [{a['title']}]({a['url']})\n"
+        elements.append({"tag": "markdown", "content": zhihu_md})
+        elements.append({"tag": "hr"})
 
     # 兴趣领域
     for interest_name, news_list in interest_news.items():
@@ -199,8 +209,8 @@ def build_afternoon_card(
     section_names = ["AI 技巧", "心理学/经济学", "品牌洞察"]
 
     for i, tip in enumerate(tips):
-        name = section_names[i] if i < len(section_names) else "知识卡片"
-        icon = section_icons[i] if i < len(section_icons) else "📌"
+        name = tip.get("section_name") or (section_names[i] if i < len(section_names) else "知识卡片")
+        icon = tip.get("section_icon") or (section_icons[i] if i < len(section_icons) else "📌")
         tip_md = f"**━━ {icon} {name} ━━**\n"
         tip_md += tip.get("content", "")
         links = tip.get("links", [])
