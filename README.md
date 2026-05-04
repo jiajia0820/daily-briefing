@@ -67,11 +67,15 @@ RSS：
 
 ### 早报
 
-![早报示例](docs/images/morning-example.svg)
+<p>
+  <img src="docs/images/morning-example.svg" alt="早报示例" width="360">
+</p>
 
 ### 午报
 
-![午报示例](docs/images/afternoon-example.svg)
+<p>
+  <img src="docs/images/afternoon-example.svg" alt="午报示例" width="360">
+</p>
 
 ## 工作方式
 
