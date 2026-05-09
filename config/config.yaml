@@ -2,9 +2,9 @@
 
 user:
   # City name used by QWeather GEO lookup.
-  city: "Beijing"
+  city: "鼓楼区"
   # Optional administrative area, useful when city names are ambiguous.
-  city_adm: "Beijing"
+  city_adm: "南京"
 
 modules:
   morning:
