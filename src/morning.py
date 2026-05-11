@@ -359,7 +359,8 @@ def main():
 
     # 8. 天气
     logger.info("--- 步骤 8: 获取天气 ---")
-    city = config.get("user", {}).get("city", "鼓楼")
+    city = config.get("user", {}).get("city", "鼓楼区")
+    city_adm = config.get("user", {}).get("city_adm", "南京")
     weather_cfg = config.get("weather", {})
     weather = None
     if weather_enabled:
@@ -367,6 +368,7 @@ def main():
             city,
             api_key=weather_cfg.get("api_key", ""),
             api_host=weather_cfg.get("api_host", ""),
+            location=city_adm,
         )
     else:
         logger.info("天气模块已关闭")
