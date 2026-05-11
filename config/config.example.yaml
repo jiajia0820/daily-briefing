@@ -124,7 +124,7 @@ weather:
   provider: "qweather"
   api_key: "${QWEATHER_API_KEY}"
   # QWeather API host. Use the host assigned in your QWeather console.
-  api_host: "your-qweather-host.example.com"
+  api_host: "devapi.qweather.com"
 
 dedup:
   retention_days: 7

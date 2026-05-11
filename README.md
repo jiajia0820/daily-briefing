@@ -146,7 +146,7 @@ user:
 weather:
   provider: "qweather"
   api_key: "${QWEATHER_API_KEY}"
-  api_host: "your-qweather-host.example.com"
+  api_host: "devapi.qweather.com"
 ```
 
 ### 5. 修改个人偏好
