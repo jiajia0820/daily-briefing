@@ -21,6 +21,7 @@ jobs:
 
       - name: Run afternoon briefing
         env:
+          TZ: Asia/Shanghai
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}
           FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}

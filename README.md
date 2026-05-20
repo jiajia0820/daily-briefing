@@ -118,6 +118,7 @@ Fork 本仓库到你的 GitHub 账号。
 | `FEISHU_APP_SECRET` | 是 | 飞书自建应用 App Secret |
 | `FEISHU_RECEIVE_ID` | 是 | 飞书接收者 ID，默认使用 `open_id` |
 | `QWEATHER_API_KEY` | 是 | 和风天气 API Key |
+| `QWEATHER_API_HOST` | 是 | 和风天气控制台分配的 API Host |
 
 本项目默认使用飞书自建应用私聊推送，不是群机器人 webhook。
 
@@ -146,7 +147,7 @@ user:
 weather:
   provider: "qweather"
   api_key: "${QWEATHER_API_KEY}"
-  api_host: "devapi.qweather.com"
+  api_host: "${QWEATHER_API_HOST}"
 ```
 
 ### 5. 修改个人偏好
@@ -250,6 +251,7 @@ FEISHU_APP_ID=your-app-id
 FEISHU_APP_SECRET=your-app-secret
 FEISHU_RECEIVE_ID=your-open-id
 QWEATHER_API_KEY=your-qweather-key
+QWEATHER_API_HOST=your-qweather-host.example.com
 ```
 
 ### 7. 定时触发
